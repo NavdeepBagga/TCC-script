@@ -1,5 +1,12 @@
-This is the TCC-Automation script. This script downloads and installs the TCC-automation software on your system, making all settings and changes all itself. In order to run the script; i) Download the TCC-script and change the script permissions to 777. ii) Move the script to home directory and run the following command. iii) run sudo ./auto.sh iv) add the required changes and you get TCC-Automation software running on your system.
+This is the TCC-Automation script. This script downloads and installs the TCC-automation software on your system, making all settings and changes all itself
 
-Pre-Required:
 
-Django 1.4 python 2.7 mysql 5.1
+Django 1.4, python 2.7 and mysql 5.1
+
+####RUN####
+1. Copy the script and place it in the home folder.
+2. Change permimssions to 755
+3. Run the scrip with    
+   sudo ./auto.sh
+4. Enter the asked parameters.
+5. You get TCC-Automation software installed on your system
