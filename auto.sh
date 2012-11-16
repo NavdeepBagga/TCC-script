@@ -196,7 +196,7 @@ then
    echo "#                                                    #"
    echo "######################################################"
    echo ""
-   git clone https://github.com/damanpreet26/Automation.git
+   git clone https://github.com/sandeepmadaan/Automation.git
 
    backup       #backs up important files in other_files folder(/Automation/other_files/)
    run          #runs run function
