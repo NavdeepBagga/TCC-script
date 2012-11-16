@@ -43,9 +43,9 @@ echo ""
 
 array=("enter the database username(mostly root) :"
 "enter the database password :" "enter the system name/username :" 	
-"enter the email address :")
-array1=("db_user" "db_password" "user_name" "email_add")
-array2=("16" "17" "105" "128")
+"enter the email address :" "enter your email username :")
+array1=("db_user" "db_password" "user_name" "email_add" "email_user")
+array2=("16" "17" "111" "37" "39")
 
 
 
