@@ -43,9 +43,9 @@ echo ""
 
 array=("enter the database username(mostly root) :"
 "enter the database password :" "enter the system name/username :" 	
-"enter the email address :" "enter your email username :")
-array1=("db_user" "db_password" "user_name" "email_add" "email_user")
-array2=("16" "17" "111" "37" "39")
+"enter the email address :")
+array1=("db_user" "db_password" "user_name" "email_add")
+array2=("16" "17" "111" "37")
 
 
 
@@ -158,8 +158,39 @@ echo "enjoy your experience"
 #mysql --user=$db_user --password=$db_password $db_name < Automation/other_files/nawa.sql
 cd Automation/
 python manage.py syncdb                   #creates a blnk database for use, using django commands
-fi   
 
+
+echo "Now get ready to ADD Organisation details to your software."
+echo ""
+
+read -p "enter organisation id :" id
+read -p "enter organisation name :" name
+read -p "enter organisation address :" address
+read -p "phone/contact number :" phone
+read -p "Director of the Organisation :" dir
+#read -p "logo" logo
+
+
+mysql  --user=$db_user --password=$db_password $db_name << EOF
+Insert into tcc_organisation (id, name, address, phone, director, logo_upload) values( "$id", "$name", "$address", "$phone", '$dir', "$logo");
+EOF
+
+echo "Now get ready to ADD Departmant details to your software."
+echo ""
+
+read -p "enter the Department id :" id
+read -p "enter Department name :" name
+read -p "enter Department address :" address
+read -p "phone/contact number :" phone
+read -p "Dean of the Department:" dean
+read -p "enter the fax number :" faxno
+
+
+mysql  --user=$db_user --password=$db_password $db_name << EOF
+Insert into tcc_department (id, organisation_id, name, address, phone, dean, faxno) values( "$id", 1, "$name", "$address", "$phone", '$dean', "$faxno");
+EOF
+
+fi   
 }
 
 restart()
