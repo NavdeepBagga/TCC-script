@@ -3,7 +3,7 @@
 This is the TCC-Automation script. This script downloads and installs the TCC-automation software on your system, making all settings and changes all itself
 
 ####REQUIREMENT####
-Django 1.4, python 2.7 and mysql 5.1
+Django 1.4, python 2.7, mysql 5.1 and mailserver 
 
 ####RUN####
 1. Copy the script and place it in the home folder.
