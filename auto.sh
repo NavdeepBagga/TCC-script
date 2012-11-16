@@ -141,7 +141,7 @@ read -p "enter 'Yes' for the demo database & 'No' for new database : "  db_yesno
 if [ $db_yesno = y ] || [ $db_yesno = Y ] ||[ $db_yesno = yes ] ||[ $db_yesno = YES ]     
 then 
 echo ""
-echo "now u get the demo.sql in your database"
+echo "now you get the demo.sql in your database"
 echo "get ready to use TCC automation software"
 
 
