@@ -42,10 +42,9 @@ echo ""
 #################################################################
 
 array=("enter the database username(mostly root) :"
-"enter the database password :" "enter the system name/username :" 	
-"enter the email address :")
-array1=("db_user" "db_password" "user_name" "email_add")
-array2=("16" "17" "111" "37")
+"enter the database password :" "enter the email address :")
+array1=("db_user" "db_password" "email_add")
+array2=("16" "17" "37")
 
 
 
@@ -92,13 +91,28 @@ done
 #cat Automation/settings.py                       #reads file in terminal
 
 
+#################################################################################
+#
+# here the username automatically gets input from the system
+#
+#################################################################################
+
+
+NAME=$(who am i | awk '{print $1}')
+
+sed -i "111 s/user_name/$NAME/" $file
+echo "the username is $NAME"
+
+
+
+
 ######################################################################
 #
 # changes in django.wsgi file 
 #
 ######################################################################
 
-sed -i "s/user_name/$user_name/" Automation/apache/django.wsgi
+sed -i "s/user_name/$NAME/" Automation/apache/django.wsgi
 
 ######################################################################
 #
@@ -112,7 +126,7 @@ cat Automation/other_files/hhtp_cont >> /etc/apache2/httpd.conf
       #this appends the text from the file to the httpd.conf
 
 
-sed -i "s/user_name/$user_name/" /etc/apache2/httpd.conf           
+sed -i "s/user_name/$NAME/" /etc/apache2/httpd.conf           
       #this replaces the word to the username
 
 
@@ -141,7 +155,7 @@ read -p "enter 'Yes' for the demo database & 'No' for new database : "  db_yesno
 if [ $db_yesno = y ] || [ $db_yesno = Y ] ||[ $db_yesno = yes ] ||[ $db_yesno = YES ]     
 then 
 echo ""
-echo "now you get the demo.sql in your database"
+echo "now u get the demo.sql in your database"
 echo "get ready to use TCC automation software"
 
 
