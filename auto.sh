@@ -260,10 +260,7 @@ restart()
 
 browser()
 {
-http://localhost/automation/=$1
-[[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
-path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
-echo "Can't find browser"
+gnome-open http://localhost/automation/
 }
 
 check()
