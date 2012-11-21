@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #################################################################
-# Settings.py file changing script                              #
+# Settings.pt file changing script                              #
 #                                                               #
 #                                                               #
 #  run in terminal, use ./auto.sh                               #
@@ -11,7 +11,7 @@
 #                                                               #
 #                                                               #
 # created : 4-10-2012                                           #
-# last update : 18-11-2012                                      #
+# last update : 15-11-2012                                      #
 # VER=1.3                                                       #
 #                                                               #
 #################################################################
@@ -41,8 +41,8 @@ echo ""
 #
 #################################################################
 
-array=("enter the database username(mostly root) :"
-"enter the database password :" "enter the email address :")
+array=("enter the mysql username(mostly root) :"
+"enter the mysql password :" "enter the email address :")
 array1=("db_user" "db_password" "email_add")
 array2=("16" "17" "37")
 
@@ -68,13 +68,16 @@ while [ $i -lt $len ]; do
 done                                                    #end of for loop
         
 
-        
+# this part checks if database name entered is created before or not.        
 a=1
 while [ $a -ne 2 ]
 do
 {
 
+# inputs database name from the user
 read -p "enter database name you want to create :" db_name
+
+#checks the existence of database
 RESULT=`mysql --user="$db_user" --password="$db_password" --skip-column-names -e "SHOW DATABASES LIKE '$db_name'"`
 if [ $RESULT ]; then
     echo "The Database exist, choose another name for database."
@@ -162,6 +165,10 @@ echo "get ready to use TCC automation software"
 # this imports demo.sql to the database defined by the user
 mysql --user=$db_user --password=$db_password $db_name < Automation/other_files/demo.sql 
 
+cd Automation/
+
+# this creates a new superuser
+python manage.py createsuperuser
 
 #defined every possible no condition
 elif [ $db_yesno = n ] || [ $db_yesno = N ] || [ $db_yesno = no ] || [ $db_yesno = NO ]  
@@ -169,27 +176,51 @@ then
 echo ""
 echo "now u get a new database"
 echo "enjoy your experience"
-#mysql --user=$db_user --password=$db_password $db_name < Automation/other_files/nawa.sql
+
+
 cd Automation/
 python manage.py syncdb                   #creates a blnk database for use, using django commands
 
 
-echo "Now get ready to ADD Organisation details to your software."
+# select count(*) , counts the number of entries in the table
+result1=`mysql --user=root --password=demon --skip-column-names -e "use ed;" -e "select count(*) from auth_user;"`
+
+#echo $result1
+
+# this checks if the count is zero or not
+if [ $result1 = 0 ]
+then
+echo ""
+echo "you need to create a superuser"
+#this creates a superuser
+python manage.py createsuperuser
+
+else
+
+echo ""
+fi
+
+# there is a need to enter Organization details in the database.
+echo ""
+echo "Now get ready to ADD Organization details to your software."
 echo ""
 
-read -p "enter organisation id :" id
-read -p "enter organisation name :" name
-read -p "enter organisation address :" address
+read -p "enter organization id :" id
+read -p "enter organization name :" name
+read -p "enter organization address :" address
 read -p "phone/contact number :" phone
-read -p "Director of the Organisation :" dir
+read -p "Director of the Organization :" dir
 #read -p "logo" logo
 
-
+# this Inserts into the table the input values.
 mysql  --user=$db_user --password=$db_password $db_name << EOF
 Insert into tcc_organisation (id, name, address, phone, director, logo_upload) values( "$id", "$name", "$address", "$phone", '$dir', "$logo");
 EOF
 
-echo "Now get ready to ADD Departmant details to your software."
+
+# There is a need to enter Department details in the database.
+echo ""
+echo "Now get ready to ADD Department details to your software."
 echo ""
 
 read -p "enter the Department id :" id
@@ -199,7 +230,7 @@ read -p "phone/contact number :" phone
 read -p "Dean of the Department:" dean
 read -p "enter the fax number :" faxno
 
-
+# this inserts values into corresponding fields in tcc_department table
 mysql  --user=$db_user --password=$db_password $db_name << EOF
 Insert into tcc_department (id, organisation_id, name, address, phone, dean, faxno) values( "$id", 1, "$name", "$address", "$phone", '$dean', "$faxno");
 EOF
@@ -209,17 +240,40 @@ fi
 
 restart()
 {
-
 /etc/init.d/apache2 restart               #restarts apache
-
 }
 
 browser()
 {
-
 gnome-open http://localhost/automation/   #opens the url in default browser
-
 }
+
+check()
+{
+ echo ""
+   echo "######################################################"
+   echo "#                                                    #"
+   echo "#    DOWNLOADING---Automation software---            #"
+   echo "#                                                    #"
+   echo "######################################################"
+   echo ""
+   
+   #this clones the Automation folder from git hub
+   git clone https://github.com/sandeepmadaan/Automation.git
+
+   backup       #backs up important files in other_files folder(/Automation/other_files/)
+   run          #runs run function
+   restart      #runs browser function
+   browser      #runs browser function
+}
+
+#####################################################################################
+#
+#
+#    Script starts here
+#
+#
+#####################################################################################
 
 if  [ -d /usr/local/lib/python2.7/dist-packages/django ] && [ -f /usr/bin/mysql ]; 
 #if django and mysql are installed on the system the function runs.
@@ -234,19 +288,30 @@ then
    echo "-------installing django modules---------"
    pip install django-registration
    pip install django-tagging
-   echo ""
-   echo "######################################################"
-   echo "#                                                    #"
-   echo "#    DOWNLOADING---Automation software---            #"
-   echo "#                                                    #"
-   echo "######################################################"
-   echo ""
-   git clone https://github.com/sandeepmadaan/Automation.git
 
-   backup       #backs up important files in other_files folder(/Automation/other_files/)
-   run          #runs run function
-   restart      #runs browser function
-   browser      #runs browser function
+  
+
+###################################################################
+#
+#
+#checking automation folder before in home directory
+#
+#
+###################################################################
+
+echo "now we test if there is any folder named Automation that exists in home directory"
+if (test -d Automation)              #check if the same folder exits 
+  then
+   mv Automation/ Automation_old/
+
+  check
+
+  else
+  
+  check 
+  
+fi
+
 else
     echo "Install Django and Mysql, before running the script"              #else exits
     exit
