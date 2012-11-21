@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #################################################################
-# Settings.pt file changing script                              #
+# Settings.py file changing script                              #
 #                                                               #
 #                                                               #
 #  run in terminal, use ./auto.sh                               #
@@ -41,12 +41,29 @@ echo ""
 #
 #################################################################
 
-array=("enter the mysql username(mostly root) :"
-"enter the mysql password :" "enter the email address :")
-array1=("db_user" "db_password" "email_add")
-array2=("16" "17" "37")
+file=Automation/settings.py
 
+array=("enter the mysql password :" "enter the email address :")
+array1=("db_password" "email_add")
+array2=("17" "37")
 
+#################################################################
+#
+#  asking user to input the mysql username
+#
+#################################################################
+echo "Enter mysql Userame : "
+while read db_user; do
+     if [ -z "${db_user}" ]; then
+          echo "you need to enter the username, do it again!"
+     else
+          break
+     fi
+done
+
+#echo $db_user
+
+sed -i "16 s/db_user/$db_user/" $file
 
 ##################################################################
 #
@@ -58,8 +75,6 @@ array2=("16" "17" "37")
 len=${#array[*]}
 
 i=0
-
-file=Automation/settings.py
 
 while [ $i -lt $len ]; do
 	read -p "${array[$i]}" ${array1[$i]}                           #this reads input from the user
@@ -77,7 +92,7 @@ do
 # inputs database name from the user
 read -p "enter database name you want to create :" db_name
 
-#checks the existence of database
+#checks the existance of database
 RESULT=`mysql --user="$db_user" --password="$db_password" --skip-column-names -e "SHOW DATABASES LIKE '$db_name'"`
 if [ $RESULT ]; then
     echo "The Database exist, choose another name for database."
@@ -182,12 +197,12 @@ cd Automation/
 python manage.py syncdb                   #creates a blnk database for use, using django commands
 
 
-# select count(*) , counts the number of entries in the table
+# scelect count(*) , counts the number of enteries in the table
 result1=`mysql --user=root --password=demon --skip-column-names -e "use ed;" -e "select count(*) from auth_user;"`
 
 #echo $result1
 
-# this checks if the count is zero or not
+# ths checks if the count is zero or not
 if [ $result1 = 0 ]
 then
 echo ""
@@ -200,16 +215,16 @@ else
 echo ""
 fi
 
-# there is a need to enter Organization details in the database.
+# there is a need to enter Organisation details in the database.
 echo ""
-echo "Now get ready to ADD Organization details to your software."
+echo "Now get ready to ADD Organisation details to your software."
 echo ""
 
-read -p "enter organization id :" id
-read -p "enter organization name :" name
-read -p "enter organization address :" address
+read -p "enter organisation id :" id
+read -p "enter organisation name :" name
+read -p "enter organisation address :" address
 read -p "phone/contact number :" phone
-read -p "Director of the Organization :" dir
+read -p "Director of the Organisation :" dir
 #read -p "logo" logo
 
 # this Inserts into the table the input values.
@@ -220,7 +235,7 @@ EOF
 
 # There is a need to enter Department details in the database.
 echo ""
-echo "Now get ready to ADD Department details to your software."
+echo "Now get ready to ADD Departmant details to your software."
 echo ""
 
 read -p "enter the Department id :" id
@@ -245,7 +260,10 @@ restart()
 
 browser()
 {
-gnome-open http://localhost/automation/   #opens the url in default browser
+http://localhost/automation/=$1
+[[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
+echo "Can't find browser"
 }
 
 check()
@@ -258,7 +276,7 @@ check()
    echo "######################################################"
    echo ""
    
-   #this clones the Automation folder from git hub
+   #this clones the Automation folder from github
    git clone https://github.com/sandeepmadaan/Automation.git
 
    backup       #backs up important files in other_files folder(/Automation/other_files/)
