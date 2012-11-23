@@ -317,7 +317,30 @@ then
 echo "now we test if there is any folder named Automation that exists in home directory"
 if (test -d Automation)              #check if the same folder exits 
   then
-   mv Automation/ Automation_old/
+
+
+######################################################################
+#
+# this part makes sure that if there is any existing Automation folder 
+# in home directory then it renames it with Automation.date.time
+#
+#######################################################################
+
+#cd /home/$user_name/
+ 
+#exercise=/home/$user_name/
+ 
+mDate=$(date +%Y%m%d%H:%M:%S)
+for mFName in $PWD/Automation
+do
+    mPref=${mFName%.log}
+    echo $mPref | egrep -q "\.[0-9]{10}:[0-9]{2}:[0-9]{2}"
+    [ $? -eq 0 ] && continue
+    mv ${mFName} ${mPref}.${mDate}
+    echo $PWD3
+done
+
+
 
   check
 
