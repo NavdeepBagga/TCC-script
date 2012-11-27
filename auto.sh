@@ -43,28 +43,46 @@ echo ""
 
 file=Automation/settings.py
 
-array=("enter the mysql password :" "enter the email address :")
-array1=("db_password" "email_add")
-array2=("17" "37")
+array=("enter the email address :")
+array1=("email_add")
+array2=("37")
 
 #################################################################
 #
 #  asking user to input the mysql username
 #
 #################################################################
-echo "Enter mysql Userame : "
-while read db_user; do
-     if [ -z "${db_user}" ]; then
-          echo "you need to enter the username, do it again!"
-     else
-          break
-     fi
+
+a=1
+while [ $a -ne 2 ]
+do
+{
+
+# inputs database name from the user
+read -p "enter mysql username :" db_user
+read -p "enter mysql password :" db_password
+
+
+RESULT=`mysql --user="$db_user" --password="$db_password" --skip-column-names -e "SHOW DATABASES LIKE 'mysql'"` 2> /dev/null
+if [ $RESULT ]; then
+    echo ""
+    echo "Username and password match"
+    a=2
+    break
+
+
+else
+    echo "" 
+    echo "Username and password doesn't match"
+    echo "re-enter the details"
+    echo ""
+
+fi
+}
 done
 
-#echo $db_user
-
 sed -i "16 s/db_user/$db_user/" $file
-
+sed -i "17 s/db_password/$db_password/" $file
 ##################################################################
 #
 # length of the array
