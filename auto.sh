@@ -216,7 +216,7 @@ python manage.py syncdb                   #creates a blnk database for use, usin
 
 
 # scelect count(*) , counts the number of enteries in the table
-result1=`mysql --user=root --password=demon --skip-column-names -e "use ed;" -e "select count(*) from auth_user;"`
+result1=`mysql --user=$db_user --password=$db_password --skip-column-names -e "use $db_name;" -e "select count(*) from auth_user;"`
 
 #echo $result1
 
@@ -360,13 +360,9 @@ done
 
 
 
-  check
-
-  else
-  
-  check 
-  
 fi
+   check 
+  
 
 else
     echo "Install Django and Mysql, before running the script"              #else exits
