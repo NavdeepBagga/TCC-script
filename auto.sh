@@ -91,7 +91,6 @@ run()  # the function
      let i++
   done                                                    #end of for loop
         
-
 # this part checks if database name entered is created before or not.        
   a=1
   while [ $a -ne 2 ]
@@ -343,3 +342,4 @@ if  [ ! -f /usr/bin/mysql ]  # checks if django and mysql are installed on the s
       apt-get install mysql-server
 fi
 django
+
