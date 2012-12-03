@@ -21,7 +21,14 @@
 
 backup()
 {
-  cp /etc/apache2/httpd.conf Automation/other_files/   #copies httpd.conf file in Automation/other_files folder
+  sudo cp /etc/apache2/httpd.conf Automation/other_files/   #copies httpd.conf file in Automation/other_files folder
+}
+
+
+media()
+{
+  sudo cp -r Automation/other_files/media/ /usr/local/lib/python2.7/dist-packages/django/contrib/admin/
+  sudo chmod -R 777 /usr/local/lib/python2.7/dist-packages/django/contrib/admin/media/
 }
 
 run()  # the function 
@@ -190,7 +197,7 @@ run()  # the function
 
 # scelect count(*) , counts the number of enteries in the table
         result1=`mysql --user=$db_user --password=$db_password --skip-column-names -e "use $db_name;" -e "select count(*) from auth_user;"`
-        2
+        
 # ths checks if the count is zero or not
        if [ $result1 = 0 ]
           then
@@ -262,6 +269,7 @@ check()
    git clone https://github.com/sandeepmadaan/Automation.git
 
    backup       #backs up important files in other_files folder(/Automation/other_files/)
+   media        #copies media folder into (~/contrib/admin/)
    run          #runs run function
    restart      #runs browser function
    browser      #runs browser function
